@@ -1,6 +1,8 @@
 # Hyperledger Fabric Client for Cicero Chaincode
 
-A client for the Hyperleger Fabric Cicero chaincode to deploy and execute Accord Project Cicero Smart Legal Contract templates.
+This sample shows how you can deploy and execute Smart Legal Contracts on-chain using Hyperledger Fabric v1.1.
+
+Using this client you can deploy a [Smart Legal Contract Templates](https://templates.accordproject.org) from the Open Source [Accord Project](https://accordproject.org) to your HLF v1.1 blockchain. You can then submit transactions to the Smart Legal Contract, with the contract state persisted to the blockchain, and return values and emitted events propagated back to the client.
 
 The chaincode itself is under the `chaincode` directory of this repository, here: https://github.com/accordproject/fabric-samples/blob/release-1.1/chaincode/cicero/node/cicero.js
 
