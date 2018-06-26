@@ -18,7 +18,9 @@ var Fabric_Client = require('fabric-client');
 var path = require('path');
 var util = require('util');
 var os = require('os');
+
 const Template = require('@accordproject/cicero-core').Template;
+const Clause = require('@accordproject/cicero-core').Clause;
 
 //
 var fabric_client = new Fabric_Client();
@@ -62,15 +64,18 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 	tx_id = fabric_client.newTransactionID();
 	console.log("Assigning transaction_id: ", tx_id._transaction_id);
 
-	// createCar chaincode function - requires 5 args, ex: args: ['CAR12', 'Honda', 'Accord', 'Black', 'Tom'],
-	// changeCarOwner chaincode function - requires 2 args , ex: args: ['CAR10', 'Dave'],
-	// must send the proposal to endorsing peers
-
 	const contractId = 'MYCONTRACT';
 	const template = await Template.fromUrl('ap://helloworld@0.2.1#hash');
 	const archive = await template.toArchive();
 	const templateBase64 = archive.toString('base64');
 	const clauseText = 'Name of the person to greet: "Fred Blogs".\nThank you!';
+
+	// parse the contract text
+	const clause = new Clause(template);
+	clause.parse(clauseText);
+	const clauseData = clause.getData();
+
+	// create the initial state
 	const state = {};
 	state.$class = 'org.accordproject.cicero.contract.AccordContractState';
 	state.stateId = contractId;
@@ -79,7 +84,7 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 		//targets: let default to the peer assigned to the client
 		chaincodeId: 'cicero',
 		fcn: 'deploySmartLegalContract',
-		args: [contractId, templateBase64, clauseText, JSON.stringify(state)],
+		args: [contractId, templateBase64, JSON.stringify(clauseData), JSON.stringify(state)],
 		chainId: 'mychannel',
 		txId: tx_id
 	};
@@ -88,13 +93,14 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 	return channel.sendTransactionProposal(request);
 }).then((results) => {
 	var proposalResponses = results[0];
-	console.log('Proposal response: ' + JSON.stringify(proposalResponses));
+	// console.log('Proposal response: ' + JSON.stringify(proposalResponses));
 	var proposal = results[1];
 	let isProposalGood = false;
 	if (proposalResponses && proposalResponses[0].response &&
 		proposalResponses[0].response.status === 200) {
 			isProposalGood = true;
 			console.log('Transaction proposal was good');
+			console.log('Response payload: ' + proposalResponses[0].response.payload);
 		} else {
 			console.error('Transaction proposal was bad');
 		}

@@ -70,12 +70,12 @@ class Chaincode {
   async deploySmartLegalContract(stub, args) {
     console.info('============= START : Deploy Smart Contract ===========');
     if (args.length != 4) {
-      throw new Error('Incorrect number of arguments. Expecting 4 (Contract ID, Template Base64, Clause Text. State)');
+      throw new Error('Incorrect number of arguments. Expecting 4 (Contract ID, Template Base64, Contract Data. State)');
     }
 
     const contractId = args[0];
     const templateData = args[1];
-    const clauseText = args[2];
+    const contractData = args[2];
     const stateText = args[3];
 
     // check that the template is valid
@@ -85,16 +85,19 @@ class Chaincode {
     // save the template data
     await stub.putState(`${contractId}-Template`, templateData);
     
-    // parse the clause text
+    // check the clause data is valid
     const clause = new Clause(template);
-    clause.parse(clauseText);
+    clause.setData(JSON.parse(contractData));
 
-    // save the state
+    // save the initial state
     const state = template.getSerializer().fromJSON(JSON.parse(stateText));
     await stub.putState(`${contractId}-State`, Buffer.from(JSON.stringify(state)));
 
-    // save the clause data
+    // save the contract data
     await stub.putState(`${contractId}-Data`, Buffer.from(JSON.stringify(clause.getData())));
+
+    // return a message
+    return Buffer.from(`Successfully deployed contract ${contractId} based on ${template.getIdentifier()}`);
   }
 
   /**
