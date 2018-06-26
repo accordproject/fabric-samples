@@ -18,7 +18,7 @@ You will need up to date versions of `git` and `node` for this sample to work. T
 ./startFabric node
 ```
 
-Wait for 2-3 minutes while HLF starts. The install the npm dependencies for the client code:
+Wait for 2-3 minutes while HLF starts. Next install the npm dependencies for the client code:
 
 ```
 npm install
@@ -63,6 +63,8 @@ Successfully committed the change to the ledger by the peer
 ```
 
 The interesting part is: `Response payload: Successfully deployed contract MYCONTRACT based on helloworld@0.2.1` !
+
+Finally we submit a transaction to HLF, the chaincode loads the template from the blockchain (including its logic), validates the incoming transaction against the data model (schema) and then executes the contract. The return value from the contract is returned to the client and any events emitted by the contract are pushed onto the HLF event bus for asynchronous delivery to connected clients. Finally the potentially updated state of the contract is persisted back to the ledger.
 
 ```
 node execute.js
