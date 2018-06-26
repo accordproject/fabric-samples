@@ -21,19 +21,23 @@ const Engine = require('@accordproject/cicero-engine').Engine;
 
 /**
  * Hyperledger Fabric chaincode to deploy and execute an Accord Project
- * Cicero Smart Legal Contract.
+ * Cicero Smart Legal Contract on-chain.
  */
 class Chaincode {
 
   /**
-   * 
-   * @param {*} stub 
+   * Called by the stub to initialize the chaincode.
+   * @param {*} stub the HLF stub
    */
   async Init(stub) {
     console.info('=========== Instantiated cicero chaincode ===========');
     return shim.success();
   }
 
+  /**
+   * Called by the stub when a transaction is submitted.
+   * @param {*} stub the HLF stub
+   */
   async Invoke(stub) {
     let ret = stub.getFunctionAndParameters();
     console.info(ret);
@@ -53,9 +57,9 @@ class Chaincode {
   }
 
   /**
-   * 
-   * @param {*} stub 
-   * @param {*} args 
+   * Initializes the ledger.
+   * @param {*} stub the HLF stub
+   * @param {Array} args function arguments
    */
   async initLedger(stub, args) {
     console.info('============= START : Initialize Ledger ===========');
@@ -63,9 +67,15 @@ class Chaincode {
   }
 
   /**
-   * 
-   * @param {} stub 
-   * @param {*} args 
+   * Deploys a Smart Legal Contract to the ledger
+   * @param {*} stub the HLF stub
+   * @param {Array} args function arguments
+   * <ol>
+   *   <li>contractId (string), the identifier of the contract. Used on subsequent calls to `executeSmartLegalContract`. 
+   *   <li>templateData (base64 encoded string), a base-64 encoded Cicero template archive. 
+   *   <li>contractData (JSON string), the JSON object (as a string) that parameterizes the templates. Must be a valid instance of the template model for the contract.
+   *   <li>state (JSON string), the JSON object (as a string) for the initial state of the contract. Must be a valid instance of the state model for the contract.
+   * </ol>
    */
   async deploySmartLegalContract(stub, args) {
     console.info('============= START : Deploy Smart Contract ===========');
@@ -101,9 +111,13 @@ class Chaincode {
   }
 
   /**
-   * 
-   * @param {*} stub 
-   * @param {*} args 
+   * Executes a previously deployed Smart Legal Contract, returning results and emitting events.
+   * @param {*} stub the HLF stub
+   * @param {Array} args function arguments
+   * <ol>
+   *   <li>contractId (string), the identifier of the contract. Used on subsequent calls to `executeSmartLegalContract`. 
+   *   <li>request (JSON string), the JSON object (as a string) for request object for the contract. Must be a valid instance of a contract request type.
+   * </ol>
    */
   async executeSmartLegalContract(stub, args) {
     console.info('============= START : Execute Smart Contract ===========');
