@@ -1,5 +1,8 @@
-# Cicero
-Hyperleger Fabric Chaincode to deploy and execute Accord Project Cicero Smart Legal Contract templates
+# Hyperledger Fabric Client for Cicero Chaincode
+
+A client for the Hyperleger Fabric Cicero chaincode to deploy and execute Accord Project Cicero Smart Legal Contract templates.
+
+The chaincode itself is under the `chaincode` directory of this repository, here: https://github.com/accordproject/fabric-samples/blob/release-1.1/chaincode/cicero/node/cicero.js
 
 ## Running
 
