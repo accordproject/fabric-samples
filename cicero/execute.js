@@ -62,14 +62,11 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 	tx_id = fabric_client.newTransactionID();
 	console.log("Assigning transaction_id: ", tx_id._transaction_id);
 
-	// createCar chaincode function - requires 5 args, ex: args: ['CAR12', 'Honda', 'Accord', 'Black', 'Tom'],
-	// changeCarOwner chaincode function - requires 2 args , ex: args: ['CAR10', 'Dave'],
-	// must send the proposal to endorsing peers
-
 	const contractId = 'MYCONTRACT';
 	const ciceroRequest = {};
 	ciceroRequest.$class = 'org.accordproject.helloworld.MyRequest';
-	ciceroRequest.input = 'Dan';
+	ciceroRequest.input = 'Accord Project';
+	console.log('Request: ' + JSON.stringify(ciceroRequest,null,4));
 
 	var request = {
 		//targets: let default to the peer assigned to the client
@@ -84,13 +81,14 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 	return channel.sendTransactionProposal(request);
 }).then((results) => {
 	var proposalResponses = results[0];
-	console.log('Proposal response: ' + JSON.stringify(proposalResponses));
+	// console.log('Proposal response: ' + JSON.stringify(proposalResponses));
 	var proposal = results[1];
 	let isProposalGood = false;
 	if (proposalResponses && proposalResponses[0].response &&
 		proposalResponses[0].response.status === 200) {
 			isProposalGood = true;
 			console.log('Transaction proposal was good');
+			console.log('Response payload: ' + JSON.stringify(JSON.parse(proposalResponses[0].response.payload),null,4));
 		} else {
 			console.error('Transaction proposal was bad');
 		}
@@ -125,7 +123,7 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 		let txPromise = new Promise((resolve, reject) => {
 			let handle = setTimeout(() => {
 				event_hub.disconnect();
-				resolve({event_status : 'TIMEOUT'}); //we could use reject(new Error('Trnasaction did not complete within 30 seconds'));
+				resolve({event_status : 'TIMEOUT'}); //we could use reject(new Error('Transaction did not complete within 30 seconds'));
 			}, 3000);
 			event_hub.connect();
 			event_hub.registerTxEvent(transaction_id_string, (tx, code) => {
@@ -139,7 +137,7 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 				var return_status = {event_status : code, tx_id : transaction_id_string};
 				if (code !== 'VALID') {
 					console.error('The transaction was invalid, code = ' + code);
-					resolve(return_status); // we could use reject(new Error('Problem with the tranaction, event status ::'+code));
+					resolve(return_status); // we could use reject(new Error('Problem with the transaction, event status ::'+code));
 				} else {
 					console.log('The transaction has been committed on peer ' + event_hub._ep._endpoint.addr);
 					resolve(return_status);
