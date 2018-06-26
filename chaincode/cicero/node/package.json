@@ -1,0 +1,19 @@
+{
+	"name": "cicero",
+	"version": "1.0.0",
+	"description": "HLF chaincode to deploy and execute an Accord Project Smart Legal Contract",
+	"engines": {
+		"node": ">=8.4.0",
+		"npm": ">=5.3.0"
+	},
+	"scripts": {
+		"start": "node cicero.js"
+	},
+	"engine-strict": true,
+	"license": "Apache-2.0",
+	"dependencies": {
+        "@accordproject/cicero-core": "^0.4.4",
+        "@accordproject/cicero-engine": "^0.4.4",
+		"fabric-shim": "^1.1.2"
+	}
+}
