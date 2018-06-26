@@ -4,6 +4,12 @@ A client for the Hyperleger Fabric Cicero chaincode to deploy and execute Accord
 
 The chaincode itself is under the `chaincode` directory of this repository, here: https://github.com/accordproject/fabric-samples/blob/release-1.1/chaincode/cicero/node/cicero.js
 
+## Install
+
+To get started you need to `git clone` or download this fork of the official Hyperledger Fabric samples repository. A Cicero client and chaincode sample have been added.
+
+You will need up to date versions of `git` and `node` for this sample to work. The sample has only been tested on Mac OS X. Pull requests welcome for other platforms.
+
 ## Running
 
 ```
