@@ -44,8 +44,6 @@ with the contract text and the initial state of the contract.
 node deploy.js
 ```
 
-Finally we send an incoming transaction to our deployed contract. The contract executes with the return value passed back to the client, any events emitted via the HLF event bus, and the updated state of the contract is persisted to the blockchain.
-
 You should see output similar to this:
 
 ```
