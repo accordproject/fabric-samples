@@ -1,6 +1,6 @@
 ## Hyperledger Fabric Samples
 
-Please visit the [installation instructions](http://hyperledger-fabric.readthedocs.io/en/latest/samples.html).
+Please visit the [installation instructions](https://hyperledger-fabric.readthedocs.io/en/latest/chaincode4ade.html#install-hyperledger-fabric-samples).
 
 ## License <a name="license"></a>
 
